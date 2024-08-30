@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "./action";
+import { addToCart } from "../redux/action";
+import "./style.css"; 
 
 const products = [
   { id: 1, name: "Apple", price: 1.0 },
@@ -16,12 +17,13 @@ const ProductList = () => {
   };
 
   return (
-    <div>
+    <div className="product-list">
       <h2>Products</h2>
       <ul>
         {products.map((product) => (
-          <li key={product.id}>
-            {product.name} - ${product.price.toFixed(2)}
+          <li key={product.id} className="product-item">
+            <span>{product.name}</span>
+            <span>${product.price.toFixed(2)}</span>
             <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
           </li>
         ))}

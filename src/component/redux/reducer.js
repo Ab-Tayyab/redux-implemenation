@@ -29,13 +29,33 @@ const cartReducer = (state = initialState, action) => {
           cartItems: [...state.cartItems, { ...action.payload, quantity: 1 }],
         };
       }
+
     case REMOVE_FROM_CART:
-      return {
-        ...state,
-        cartItems: state.cartItems.filter(
-          (item) => item.id !== action.payload
-        ),
-      };
+      // Find the product in the cart
+      const productToRemove = state.cartItems.find(
+        (item) => item.id === action.payload
+      );
+
+      if (productToRemove && productToRemove.quantity > 1) {
+        // If quantity is more than 1, decrease the quantity
+        return {
+          ...state,
+          cartItems: state.cartItems.map((item) =>
+            item.id === action.payload
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          ),
+        };
+      } else {
+        // If quantity is 1 or less, remove the item from the cart
+        return {
+          ...state,
+          cartItems: state.cartItems.filter(
+            (item) => item.id !== action.payload
+          ),
+        };
+      }
+
     default:
       return state;
   }

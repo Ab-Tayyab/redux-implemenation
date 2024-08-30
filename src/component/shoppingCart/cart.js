@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "./action";
+import { addToCart, removeFromCart } from "../redux/action";
+import "./style.css";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -10,17 +11,26 @@ const Cart = () => {
     dispatch(removeFromCart(productId));
   };
 
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+
   return (
-    <div>
+    <div className="cart">
       <h2>Cart</h2>
       {cartItems.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
         <ul>
           {cartItems.map((item) => (
-            <li key={item.id}>
-              {item.name} - ${item.price.toFixed(2)} x {item.quantity}
-              <button onClick={() => handleRemoveFromCart(item.id)}>
+            <li key={item.id} className="cart-item">
+              <span>{item.name}</span>
+              <span>${item.price.toFixed(2)} x {item.quantity}</span>
+              <button onClick={() => handleAddToCart(item)}>Add</button>
+              <button
+                onClick={() => handleRemoveFromCart(item.id)}
+                disabled={item.quantity <= 0}
+              >
                 Remove
               </button>
             </li>
